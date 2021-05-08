@@ -1,7 +1,7 @@
-declare module "repl" {
-    import { Interface, Completer, AsyncCompleter } from "readline";
-    import { Context } from "vm";
-    import { InspectOptions } from "util";
+declare module 'repl' {
+    import { Interface, Completer, AsyncCompleter } from 'readline';
+    import { Context } from 'vm';
+    import { InspectOptions } from 'util';
 
     interface ReplOptions {
         /**
@@ -131,13 +131,21 @@ declare module "repl" {
          */
         readonly context: Context;
         /**
-         * The `Readable` stream from which REPL input will be read.
+         * Outdated alias for `input`.
          */
         readonly inputStream: NodeJS.ReadableStream;
         /**
-         * The `Writable` stream to which REPL output will be written.
+         * Outdated alias for `output`.
          */
         readonly outputStream: NodeJS.WritableStream;
+        /**
+         * The `Readable` stream from which REPL input will be read.
+         */
+        readonly input: NodeJS.ReadableStream;
+        /**
+         * The `Writable` stream to which REPL output will be written.
+         */
+        readonly output: NodeJS.WritableStream;
         /**
          * The commands registered via `replServer.defineCommand()`.
          */

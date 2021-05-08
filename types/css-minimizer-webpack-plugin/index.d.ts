@@ -1,18 +1,33 @@
-// Type definitions for css-minimizer-webpack-plugin 1.1
+// Type definitions for css-minimizer-webpack-plugin 1.3
 // Project: https://github.com/webpack-contrib/css-minimizer-webpack-plugin
 // Definitions by: Piotr Błażejewicz <https://github.com/peterblazejewicz>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-import { Plugin } from 'webpack';
-import { CssNanoOptions } from 'cssnano';
-import { SourceMapOptions } from 'postcss';
+// TypeScript Version: 3.7
+import { Compiler } from "webpack";
+import { CssNanoOptions } from "cssnano";
+import { ProcessOptions, SourceMapOptions } from "postcss";
 
-declare class CssMinimizerPlugin extends Plugin {
+declare class CssMinimizerPlugin {
     constructor(options?: CssMinimizerPlugin.Options);
+
+    /**
+     * Apply the plugin
+     */
+    apply(compiler: Compiler): void;
 }
 
 declare namespace CssMinimizerPlugin {
     interface Options {
-        minimizerOptions?: CssNanoOptions;
+        minimizerOptions?: CssNanoOptions & {
+            processorOptions?: {
+                from?: ProcessOptions["from"];
+                map?: ProcessOptions["map"];
+                parser?: ProcessOptions["parser"] | string;
+                stringifier?: ProcessOptions["stringifier"] | string;
+                syntax?: ProcessOptions["syntax"] | string;
+                to?: ProcessOptions["to"];
+            };
+        };
         /**
          * Test to match files against.
          */
@@ -62,8 +77,8 @@ declare namespace CssMinimizerPlugin {
      */
     interface DefaultCacheKeys {
         cssMinimizer: string;
-        'css-minimizer-webpack-plugin': string;
-        'css-minimizer-webpack-plugin-options': string;
+        "css-minimizer-webpack-plugin": string;
+        "css-minimizer-webpack-plugin-options": string;
         path: string;
         hash: string;
     }

@@ -51,7 +51,6 @@ declare namespace math {
         LOG2E: number;
         LOG10E: number;
         NaN: number;
-        null: number;
         phi: number;
         SQRT1_2: number;
         SQRT2: number;
@@ -62,6 +61,15 @@ declare namespace math {
 
         expression: MathNode;
         json: MathJsJson;
+
+        /**
+         * If null were to be included in this interface, it would be
+         * auto-suggested as an import in VSCode. This causes issues because
+         * `null` is not a valid label.
+         *
+         * @see https://github.com/josdejong/mathjs/issues/2019
+         */
+        // null: number;
 
         /*************************************************************************
          * Core functions
@@ -1224,7 +1232,7 @@ declare namespace math {
          * @param args Two or more matrices
          * @returns Concatenated matrix
          */
-        concat(...args: Array<MathArray | Matrix>): MathArray | Matrix;
+        concat(...args: Array<MathArray | Matrix | number | BigNumber>): MathArray | Matrix;
 
         /**
          * Calculate the cross product for two vectors in three dimensional
@@ -2611,7 +2619,7 @@ declare namespace math {
      * Factory and Dependencies
      ************************************************************************/
     interface FactoryDependencies {
-        create: (factories: FactoryFunctionMap, config: ConfigOptions) => Partial<MathJsStatic>;
+        create: (factories: FactoryFunctionMap, config?: ConfigOptions) => Partial<MathJsStatic>;
         factory: <T>(
             name: string,
             dependencies: MathJsFunctionName[],
@@ -2970,8 +2978,8 @@ declare namespace math {
             callback: (a: any, b: number, c: Matrix) => void,
             skipZeros?: boolean
         ): void;
-        toArray(): MathArray | Matrix;
-        valueOff(): MathArray | Matrix;
+        toArray(): MathArray;
+        valueOf(): MathArray;
         format(options?: FormatOptions | number | ((value: any) => string)): string;
         toString(): string;
         toJSON(): any;
@@ -3747,7 +3755,7 @@ declare namespace math {
          * supported for square matrices x, and positive integer exponents y.
          * @param y The exponent
          */
-        pow(): MathJsChain;
+        pow(y: number | BigNumber): MathJsChain;
 
         /**
          * Round a value towards the nearest integer. For matrices, the function
@@ -3763,7 +3771,7 @@ declare namespace math {
          * @param x The number for which to determine the sign
          * @returns The sign of x
          */
-        sign(): MathJsChain;
+        sign(x: number | BigNumber): MathJsChain;
 
         /**
          * Calculate the square root of a value. For matrices, the function is
@@ -4077,7 +4085,7 @@ declare namespace math {
         /**
          * Filter the items in an array or one dimensional matrix.
          */
-        filter(test: ((value: any, index: any, matrix: Matrix | MathArray) => Matrix | MathArray)| RegExp): MathJsChain;
+        filter(test: ((value: any, index: any, matrix: Matrix | MathArray) => boolean)| RegExp): MathJsChain;
 
         /**
          * Flatten a multi dimensional matrix into a single dimensional matrix.
@@ -4297,7 +4305,6 @@ declare namespace math {
          * @param min Minimum boundary for the random value, included
          * @param max Maximum boundary for the random value, excluded
          */
-        // tslint:disable-next-line unified-signatures
         random(max?: number): MathJsChain;
         // tslint:disable-next-line unified-signatures
         random(min: number, max: number): MathJsChain;
@@ -4308,7 +4315,6 @@ declare namespace math {
          * @param min Minimum boundary for the random value, included
          * @param max Maximum boundary for the random value, excluded
          */
-        // tslint:disable-next-line unified-signatures
         randomInt(max?: number): MathJsChain;
         // tslint:disable-next-line unified-signatures
         randomInt(min: number, max: number): MathJsChain;

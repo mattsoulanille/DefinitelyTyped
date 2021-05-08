@@ -29,6 +29,7 @@ declare namespace Ffmpeg {
         stdoutLines?: number;
         timeout?: number;
         source?: string | stream.Readable;
+        cwd?: string;
     }
 
     interface FilterSpecification {
@@ -146,6 +147,7 @@ declare namespace Ffmpeg {
         channel_layout?: string;
         bits_per_sample?: number;
         disposition?: FfprobeStreamDisposition;
+        rotation?: string | number;
     }
 
     interface FfprobeStreamDisposition {

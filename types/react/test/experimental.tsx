@@ -5,16 +5,12 @@ import React = require('react');
 function useExperimentalHooks() {
     const [toggle, setToggle] = React.useState(false);
 
-    const [startTransition, done] = React.unstable_useTransition({
-        busyMinDurationMs: 100,
-        busyDelayMs: 200,
-        timeoutMs: 300,
-    });
+    const [startTransition, done] = React.unstable_useTransition();
     // $ExpectType boolean
     done;
 
     // $ExpectType boolean
-    const deferredToggle = React.unstable_useDeferredValue(toggle, { timeoutMs: 500 });
+    const deferredToggle = React.unstable_useDeferredValue(toggle);
 
     const [func] = React.useState(() => () => 0);
 
@@ -68,4 +64,29 @@ function InvalidOpaqueIdentifierUsage() {
     const stringified2: string = id + '';
 
     return null;
+}
+
+function startTransitionTest() {
+    function transitionToPage(page: string) {}
+
+    React.unstable_startTransition(() => {
+        transitionToPage('/');
+    });
+
+    // $ExpectError
+    React.unstable_startTransition(async () => {});
+}
+
+function suspenseTest() {
+    function DisplayData() {
+        return null;
+    }
+
+    function FlameChart() {
+        return (
+            <React.Suspense fallback="computing..." unstable_expectedLoadTime={2000}>
+                <DisplayData />
+            </React.Suspense>
+        );
+    }
 }
